@@ -9,7 +9,7 @@ parser.add_argument("-u", "--drive", dest="drive_id", default=False,
 parser.add_argument("-a", "--actor", dest="actor",
                     help="part of actor name to search for")
 parser.add_argument("-d", "--detail", dest="detail",
-                    help="detail to search for")
+                    help="detail to search for", default=False)
 parser.add_argument("-p", "--pretty", action="store_true",
                     dest="pretty_print", default=False,
                     help="pretty print output")
@@ -78,6 +78,13 @@ def get_detail_by_key(actor, detail_name):
         print(actor["data"].keys())
         sys.exit()
 
+def print_entire_actor(actors):
+    for actor in actors:
+        if args.pretty_print:
+            print(json.dumps(actor, indent=4))
+        else:
+            print(actor)
+
 def print_detail(actors, detail):
     for actor in actors:
         output = get_detail_by_key(actor, args.detail)
@@ -97,4 +104,8 @@ if __name__ == "__main__":
         download_file_from_google_drive(args.drive_id, args.filename)
 
     actors = get_actors_by_name(args.filename, args.actor)
-    print_detail(actors, args.detail)
+
+    if args.detail:
+        print_detail(actors, args.detail)
+    else:
+        print_entire_actor(actors)
