@@ -9,19 +9,17 @@ def generate_spell_name(caster_name=80, adj_vs_verb=80, noun_vs_verb=80):
 
     # Caster Name
     caster = True if random.randint(1,100) <= caster_name else False
-    if caster == True:
+    if caster:
         name = names.get_last_name()
         spell_name_parts.append(f"{name.title()}'s")
 
     # 1st non-name word
-    if random.randint(1,100) <= adj_vs_verb:
+    #   if there is a caster, it always chooses an adjective
+    if caster or random.randint(1,100) <= adj_vs_verb:
         adj = r.word(include_parts_of_speech=["adjectives"])
         spell_name_parts.append(f"{adj.title()}")
     else:
-        if caster:
-            verb = r.word(include_parts_of_speech=["verbs"], ends_with="ing")
-        else:
-            verb = r.word(include_parts_of_speech=["verbs"])
+        verb = r.word(include_parts_of_speech=["verbs"])
         spell_name_parts.append(f"{verb.title()}")
 
     # 2nd non-name word
